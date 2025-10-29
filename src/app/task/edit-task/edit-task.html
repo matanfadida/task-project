@@ -1,0 +1,77 @@
+<div class="modal fade show" tabindex="-1" style="display: block; z-index: 2000;">
+    <a 
+    routerLink="/" 
+    class="modal-backdrop fade show d-block" style="--bs-backdrop-zindex:none;">
+  </a>
+    <div class="modal-dialog">
+      <div class="modal-content">
+            <h2 class="p-2 d-flex justify-content-center">הוספת משימה</h2>
+            <form (ngSubmit)="onSubmit(taskForm)" #taskForm="ngForm">
+                <div>
+                    <ul>
+                        <li>
+                            <div>
+                                <label for="title" class="form-label">כותרת</label>
+                                <input type="text" name="title" class="form-control"
+                                 required
+                                    [(ngModel)]="enteredTitle" #titleInput="ngModel"
+                                 [ngClass]="{
+                                    'is-invalid': titleInput.touched && isValid(enteredTitle),
+                                    'is-valid': titleInput.touched  && !isValid(enteredTitle)
+                                  }"
+                                 />
+                            </div>
+                            <div class="invalid-feedback d-block" *ngIf="titleInput.touched && isValid(enteredTitle)">
+                                שדה חובה
+                            </div>
+                        </li>
+                        <li>
+                            <div class="mb-3">
+                                <label for="description" class="form-label">תיאור</label>
+                                <textarea type="text" name="description" class="form-control"  [(ngModel)]="enteredDescription"></textarea>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="mb-3">
+                                <label for="priority" class="form-label">עדיפות</label>
+                                <select class="form-select" [value]="selectedPriority" (change)="onPriorityChange($event)">
+                                    <option *ngFor="let option of priorityOptions" [value]="option.value">
+                                      {{ option.label }}
+                                    </option>
+                                </select>
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                <label for="deadline" class="form-label">תאריך</label>
+                                <input type="date" name="deadline" required class="form-control" #deadlineInput="ngModel"
+                                [ngClass]="{
+                                    'is-invalid': deadlineInput.touched && isValid(enteredDeadline),
+                                    'is-valid': deadlineInput.touched  && !isValid(enteredDeadline)
+                                  }"
+                                [(ngModel)]="enteredDeadline"/>
+                            </div>
+                            <div class="invalid-feedback d-block" *ngIf="deadlineInput.touched && isValid(enteredDeadline)">
+                                שדה חובה
+                            </div>
+                        </li>
+                        <li>
+                            <div class="mb-3">
+                                <label class="form-label">סטטוס</label>
+                                <select class="form-select" [value]="selectedStatus" (change)="onStatusChange($event)">
+                                    <option *ngFor="let option of statusOptions" [value]="option.value">
+                                      {{ option.label }}
+                                    </option>
+                                </select>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="p-2 d-flex justify-content-center">
+                    <app-button type="submit" label="ערוך משימה"></app-button>
+                    <a routerLink="/" class="cancel-button btn btn-outline-primary">ביטול</a>
+                </div>
+            </form>
+      </div>
+    </div>
+  </div>

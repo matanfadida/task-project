@@ -1,0 +1,14 @@
+ul {list-style: none;}
+[dir='rtl'] .form-control.is-valid,
+[dir='rtl'] .form-control.is-invalid,
+[dir='rtl'] .form-select.is-valid,
+[dir='rtl'] .form-select.is-invalid {
+    background-position: left calc(0.375em + 0.1875rem) center;
+    padding-left: calc(1.5em + 0.75rem);
+    padding-right: 0.75rem; 
+}
+[dir='rtl'] .form-select {
+    background-position: left 0.75rem center; 
+    background-size: 16px 12px !important;
+    padding-right: 10px; 
+}
