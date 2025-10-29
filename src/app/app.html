@@ -4,55 +4,64 @@
     </li>
 </ul> -->
 <app-header></app-header>
-
+<div *ngIf="taskService.tasks().length; else noTasks">
+ 
 <div class="px-4">
-    <div class="d-flex justify-content-between align-items-center mb-2">
-      <h4 class="text-primary-emphasis">רשימת משימות</h4>
-      <app-button label="הוסף משימה" (clicked)="startAdding()"></app-button>
-    </div>
-  
-    <div class="table-responsive">
-      <table class="table table-bordered">
-        <thead class="table-secondary">
-          <tr>
-            <th scope="col">מספר</th>
-            <th scope="col">כותרת</th>
-            <th scope="col">תיאור</th>
-            <th scope="col">עדיפות</th>
-            <th scope="col">תאריך יעד</th>
-            <th scope="col">סטטוס</th>
-            <th scope="col">פעולות</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let task of taskService.tasks()">
-            <td class="text-primary-emphasis">{{task.id}}</td>
-            <td class="text-primary-emphasis">{{task.title}}</td>
-            <td class="text-primary-emphasis">{{task.description}}</td>
-            <td class="text-primary-emphasis">{{task.priority | priorityName}}</td>
-            <td class="text-primary-emphasis">{{task.deadline | date}}</td>
-            <td class="text-primary-emphasis">{{task.status | statusName}}</td>
-            <td class="text-primary-emphasis">
-              <div class="d-flex gap-2">
-                <a [routerLink]="'/tasks/' + task.id"><i class="bi bi-pencil-square"></i></a>
-                <button class="trash-button" (click)="deletedTask(task.id)">
-                  <i class="bi bi-trash3"></i>
-                </button>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+  <div class="d-flex justify-content-between align-items-center mb-2">
+    <h4 class="text-primary-emphasis">רשימת משימות</h4>
+    <app-button label="הוסף משימה" (clicked)="startAdding()"></app-button>
   </div>
-  
+
+  <div class="table-responsive">
+    <table class="table table-bordered">
+      <thead class="table-secondary">
+        <tr>
+          <th scope="col">מספר</th>
+          <th scope="col">כותרת</th>
+          <th scope="col">תיאור</th>
+          <th scope="col">עדיפות</th>
+          <th scope="col">תאריך יעד</th>
+          <th scope="col">סטטוס</th>
+          <th scope="col">פעולות</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let task of taskService.tasks()">
+          <td class="text-primary-emphasis">{{task.id}}</td>
+          <td class="text-primary-emphasis">{{task.title}}</td>
+          <td class="text-primary-emphasis">{{task.description}}</td>
+          <td class="text-primary-emphasis">{{task.priority | priorityName}}</td>
+          <td class="text-primary-emphasis">{{task.deadline | date}}</td>
+          <td class="text-primary-emphasis">{{task.status | statusName}}</td>
+          <td class="text-primary-emphasis">
+            <div class="d-flex gap-2">
+              <a [routerLink]="'/tasks/' + task.id"><i class="bi bi-pencil-square"></i></a>
+              <button class="trash-button" (click)="deletedTask(task.id)">
+                <i class="bi bi-trash3"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</div>
+
+<ng-template #noTasks>
+  <div class="d-flex justify-content-center align-items-center">
+    <div class="margin-left">אין משימות כרגע</div>
+    <app-button label="הוסף משימה" (clicked)="startAdding()"></app-button>
+  </div>
+</ng-template>
 
 <div>
-    <div *ngIf="isAdding">
-        <app-add-task (cancle)="stopAdding()"></app-add-task>
-    </div>
+  <div *ngIf="isAdding">
+      <app-add-task (cancle)="stopAdding()"></app-add-task>
+  </div>
 </div>
 
 <div>
-    <router-outlet/>
+<app-loader></app-loader>
+  <router-outlet/>
 </div>

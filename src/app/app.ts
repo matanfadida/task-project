@@ -8,9 +8,10 @@ import { StatusNamePipe } from '../pipes/status-name.pipe.js';
 import { PriorityNamePipe } from '../pipes/priority-name.pipe.js';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { TaskService } from '../services/taskService.service.js';
+import { Loader } from './shared/loader/loader.js';
 @Component({
   selector: 'app-root',
-  imports: [CommonModule,AddTask, Header, Button, DatePipe,StatusNamePipe,PriorityNamePipe, RouterLink,RouterOutlet],
+  imports: [CommonModule,AddTask, Header, Button, DatePipe,StatusNamePipe,PriorityNamePipe, RouterLink,RouterOutlet,Loader],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })

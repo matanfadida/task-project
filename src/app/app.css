@@ -2,6 +2,10 @@
     margin-right: 5px;
 }
 
+.margin-left{
+    margin-left: 20px;
+}
+
 .trash-button{
     background-color: transparent;
     border: none;
