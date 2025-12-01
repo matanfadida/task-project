@@ -1,4 +1,4 @@
-import { Component, Output,EventEmitter, Input } from '@angular/core';
+import { Component, Output,EventEmitter, Input, input, output } from '@angular/core';
 
 @Component({
   selector: 'app-user',
@@ -7,11 +7,10 @@ import { Component, Output,EventEmitter, Input } from '@angular/core';
   styleUrl: './user.css',
 })
 export class User {
-  @Input({required: true}) id!:string;
-
-  @Output() userSelected = new EventEmitter<string>();
+  id = input.required<string>();
+  userSelected = output<string>();
 
   SelectedUser(){
-    this.userSelected.emit(this.id);
+    this.userSelected.emit(this.id());
   }
 }
