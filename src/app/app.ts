@@ -1,14 +1,15 @@
 import { Component } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
-import { AddTask } from './task/add-task/add-task.js';
-import { Header } from './header/header.js';
-import { type TaskModel } from '../model/task.js';
-import { Button } from './shared/button/button.js';
-import { StatusNamePipe } from '../pipes/status-name.pipe.js';
-import { PriorityNamePipe } from '../pipes/priority-name.pipe.js';
+import { AddTask } from './task/add-task/add-task';
+import { Header } from './header/header';
+import { type TaskModel } from '../model/task';
+import { Button } from './shared/button/button';
+import { StatusNamePipe } from '../pipes/status-name.pipe';
+import { PriorityNamePipe } from '../pipes/priority-name.pipe';
 import { RouterLink, RouterOutlet } from '@angular/router';
-import { TaskService } from '../services/taskService.service.js';
-import { Loader } from './shared/loader/loader.js';
+import { TaskService } from '../services/taskService.service';
+import { Loader } from './shared/loader/loader';
+
 @Component({
   selector: 'app-root',
   imports: [CommonModule,AddTask, Header, Button, DatePipe,StatusNamePipe,PriorityNamePipe, RouterLink,RouterOutlet,Loader],

@@ -1,27 +1,24 @@
-import { Component, EventEmitter, Output, OnInit, Input } from '@angular/core';
+import { Component, EventEmitter, Output, OnInit, DestroyRef, inject } from '@angular/core';
 import { EnumService, type EnumOption } from '../../../services/enumOption.service.js'
 import { Status } from '../../../model/status.js';
 import { CommonModule } from '@angular/common';
 import { Priority } from '../../../model/priority.js';
 import { Button } from '../../shared/button/button.js';
-import { FormsModule, NgForm } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, NgForm, Validators } from '@angular/forms';
 import { type AddTaskModel } from '../../../model/AddTask.js';
 import { TaskService } from '../../../services/taskService.service.js';
 
-
-
 @Component({
   selector: 'app-add-task',
-  imports: [CommonModule,Button, FormsModule],
+  imports: [CommonModule,Button, ReactiveFormsModule],
   templateUrl: './add-task.html',
   styleUrl: './add-task.css',
 })
-export class AddTask {
-  statusOptions:EnumOption<Status>[] = [];
-  selectedStatus: number = 0;
 
+export class AddTask implements OnInit {
+  private destoryRef = inject(DestroyRef);
+  statusOptions:EnumOption<Status>[] = [];
   priorityOptions:EnumOption<Priority>[] = [];
-  selectedPriority: number = 0;
 
   @Output() cancle = new EventEmitter();
 
@@ -29,42 +26,47 @@ export class AddTask {
     this.cancle.emit();
   }
 
-  enteredTitle = '';
-  enteredDescription = '';
-  enteredDeadline = '';
-
   constructor(private taskService: TaskService,private enumService: EnumService) {
     this.statusOptions = this.enumService.getStatusOptions();
     this.priorityOptions = this.enumService.getPriorityOptions();
   }
 
-  onStatusChange(event: any) {
-    this.selectedStatus = Number(event.target.value);
+  form = new FormGroup({
+    title: new FormControl('', {validators:[Validators.required]}),
+    description: new FormControl(''),
+    deadline: new FormControl('', {validators:[Validators.required]}),
+    status: new FormControl(this.statusOptions[0]?.value || ''),
+    priority: new FormControl(this.priorityOptions[0]?.value || ''),
+  });
+
+  ngOnInit(): void {
+    var subscription = this.form.get('status')!.valueChanges.subscribe(value => {
+      console.log('Selected status:', value);
+    });
+
+    this.destoryRef.onDestroy(() => { subscription.unsubscribe() })
   }
 
-  onPriorityChange(event: any) {
-    this.selectedPriority = Number(event.target.value);
+  isInvalid(field: string) {
+    const control = this.form.get(field);
+    return control?.touched && control?.invalid;
   }
 
-  isValid(value:string){
-    return value === '' || value === undefined;
-  }
-
-  async onSubmit(form: NgForm){
-    if (form.invalid) {
-      form.control.markAllAsTouched();
+  async onSubmit(){
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
       return;
     }
 
     const newTask: AddTaskModel = {
-      title: this.enteredTitle,
-      description: this.enteredDescription,
-      priority: this.selectedPriority,
-      status: this.selectedStatus,
-      deadline:this.enteredDeadline
+      title: this.form.value.title || '',
+      description: this.form.value.description || '',
+      priority: Number(this.form.value.priority) || Number(this.priorityOptions[0]?.value) || 0,
+      status: Number(this.form.value.status) || Number(this.statusOptions[0]?.value) || 0,
+      deadline: this.form.value.deadline || ''
     };
 
-    form.resetForm();
+    this.form.reset();
 
     await this.taskService.addTask(newTask);
     this.onCancle();
